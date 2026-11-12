@@ -1,18 +1,10 @@
 TEMPLATE = app
 TARGET = qhuaweiflash-cli
-
 QT += widgets
 CONFIG += console c++11
 CONFIG -= app_bundle
-
 INCLUDEPATH += .
-
-SOURCES += \
-    cli_main.cpp \
-    ptable.cpp \
-    cli_crc.cpp
-
-HEADERS += \
-    ptable.h
-
+QMAKE_CXXFLAGS += -Wno-unused-result -Wno-write-strings -fpermissive
+SOURCES += cli_main.cpp ptable.cpp cli_crc.cpp
+HEADERS += ptable.h signver.h sio.h
 LIBS += -lz
