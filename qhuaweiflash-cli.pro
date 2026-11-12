@@ -1,4 +1,3 @@
-
 TEMPLATE = app
 TARGET = qhuaweiflash-cli
 
@@ -11,10 +10,9 @@ INCLUDEPATH += .
 SOURCES += \
     cli_main.cpp \
     ptable.cpp \
-    signver.cpp
+    cli_crc.cpp
 
 HEADERS += \
-    ptable.h \
-    signver.h
+    ptable.h
 
 LIBS += -lz
