@@ -44,14 +44,24 @@ static bool loadfw(const char *path) {
  ptable->clear(); dload_id=-1; ptable->findparts(f); fclose(f); fwfilename=path;
  return ptable->index()>0;
 }
+
 static bool savefw(const char *path) {
- FILE *o=fopen(path,"wb"); if(!o){perror(path);return false;}
- uint8_t hdr[92]={0}; hdr[0]=dload_id&7;
- if(signlen!=-1) hdr[0]|=8;
+ FILE *o=fopen(path,"wb");
+ if(!o){perror(path);return false;}
+
+ // CLI output is unsigned firmware
+ uint8_t hdr[92]={0};
+ hdr[0]=dload_id&7;
+
  bool ok=fwrite(hdr,1,sizeof(hdr),o)==sizeof(hdr);
- for(int i=0;ok && i<ptable->index();i++) ptable->save_part(i,o,false);
- if(fclose(o)!=0)ok=false; return ok;
+
+ for(int i=0;ok && i<ptable->index();i++)
+   ptable->save_part(i,o,false);
+
+ if(fclose(o)!=0)ok=false;
+ return ok;
 }
+
 int main(int argc,char **argv) {
  qputenv("QT_QPA_PLATFORM","offscreen");
  QApplication app(argc,argv);
