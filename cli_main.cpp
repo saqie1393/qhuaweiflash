@@ -17,6 +17,7 @@ static void usage() {
   puts("Usage:");
   puts("  qhuaweiflash-cli info <firmware>");
   puts("  qhuaweiflash-cli list <firmware>");
+  puts("  qhuaweiflash-cli save <firmware> <output> [--zlib]");
   puts("  qhuaweiflash-cli extract <firmware> <PART-ID|index> <output>");
   puts("  qhuaweiflash-cli replace <firmware> <PART-ID|index> <input> <output> [--zlib]");
   puts("  qhuaweiflash-cli delete <firmware> <PART-ID|index> <output> [--zlib]");
@@ -65,6 +66,14 @@ int main(int argc,char **argv) {
  const char *cmd=argv[1],*fw=argv[2];
  ptable=new ptable_list();
  if(!loadfw(fw)){fprintf(stderr,"Could not parse firmware (or no partitions found).\n");return 1;}
+ if(!strcmp(cmd,"save")){
+   bool z=zflag(argc,argv); int expected=z?5:4;
+   if(argc!=expected){usage();return 2;}
+   const char *out=z?argv[3]:argv[3];
+   if(!savefw(out,z)){fprintf(stderr,"Save failed\n");return 1;}
+   printf("Saved: %s (zlib=%s)\n",out,z?"enabled":"disabled");
+   return 0;
+ }
  if(!strcmp(cmd,"info")||!strcmp(cmd,"list")){
    printf("Firmware: %s\nType: %s (0x%x)\nPartitions: %d\n",fw,fw_description(dload_id),dload_id,ptable->index());
    for(int i=0;i<ptable->index();i++)
